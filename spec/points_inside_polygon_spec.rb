@@ -28,4 +28,36 @@ describe Polygon do
       expect(polygon.vertices).to eq(points)
     end
   end
+
+  describe "#within?" do
+    let(:polygon) { Polygon.new([0,0], [0,10], [10,10], [10,0]) }
+
+    it "should respond to within method" do
+      expect(polygon).to respond_to(:within?)
+    end
+
+    it "should accept exactly two arguments" do
+      expect(polygon).to respond_to(:within?).with(2).arguments
+      expect(polygon).not_to respond_to(:within?).with(1).arguments
+      expect(polygon).not_to respond_to(:within?).with(3).arguments
+    end
+
+    describe "points within" do
+      it "should return true for integer points within" do
+        (1..9).each do |x|
+          (0..9).each do |y|
+            expect(polygon.within?(x,y)).to be(true)
+          end
+        end
+      end
+
+      it "should return false for integer points outside" do
+        [-2, -1, 11, 12].each do |x|
+          [-2, -1, 11, 12].each do |y|
+            expect(polygon.within?(x,y)).to be(false)
+          end
+        end
+      end
+    end
+  end
 end

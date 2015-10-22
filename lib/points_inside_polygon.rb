@@ -1,9 +1,9 @@
 class Polygon
-  def initialize(*points)
-    @points = points
+  def initialize(*vertices)
+    @vertices = vertices
   end
 
-  def points
-    @points.dup
+  def vertices
+    @vertices.map(&:dup)
   end
 end

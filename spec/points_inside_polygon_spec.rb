@@ -45,16 +45,59 @@ describe Polygon do
     describe "points within" do
       it "should return true for integer points within" do
         (1..9).each do |x|
-          (0..9).each do |y|
+          (1..9).each do |y|
             expect(polygon.within?(x,y)).to be(true)
           end
         end
       end
 
+      it "should return true for any decimal points within" do
+        100.times {|| expect(polygon.within?(rand * 10, rand * 10)).to be(true)}
+      end
+
+      it "should return true for integer points at the border" do
+        [0, 10].each do |border|
+          (0..10).each do |int|
+            expect(polygon.within?(border,int)).to be(true)
+            expect(polygon.within?(int,border)).to be(true)
+          end
+        end
+      end
+
+      it "should return true for decimal points at the border" do
+        [0, 10].each do |border|
+          expect(polygon.within?(border, rand * 10)).to be(true)
+          expect(polygon.within?(rand * 10, border)).to be(true)
+        end
+      end
+    end
+
+    describe "points outside" do
       it "should return false for integer points outside" do
         [-2, -1, 11, 12].each do |x|
           [-2, -1, 11, 12].each do |y|
             expect(polygon.within?(x,y)).to be(false)
+          end
+        end
+      end
+
+      it "should return false for decimal points just outside" do
+        [0, 10].each do |border|
+          10.times do
+            offset = (border == 0 ? -rand : rand) / 1000
+            expect(polygon.within?(border + offset, rand * 10)).to be(false)
+            expect(polygon.within?(rand * 10, border + offset)).to be(false)
+          end
+        end
+      end
+
+      it "should return false for points outside but inline with a border" do
+        [0, 10].each do |border|
+          10.times do
+            offset = (border == 0 ? -rand : rand) / 1000
+            expect(polygon.within?(border, border)).to be(true)
+            expect(polygon.within?(border, border + offset)).to be(false)
+            expect(polygon.within?(border + offset, border)).to be(false)
           end
         end
       end

@@ -22,7 +22,7 @@ class Polygon
       elsif ys.max < y
         #line always crosses
         count += 1
-      elsif pt1[1] == pt2[1] || pt1[0] == pt2[0] && pt2[0] == lat
+      elsif pt1[1] == pt2[1] || pt1[0] == pt2[0] && pt2[0] == y
         #edge case
         return true
       else

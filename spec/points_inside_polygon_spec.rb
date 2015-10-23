@@ -105,8 +105,8 @@ describe Polygon do
           10.times do
             offset = (border == 0 ? -rand : rand) / 1000
             expect(polygon.within?(border, border)).to be(true)
-            expect(polygon.within?(border, border + offset)).to be(false)
             expect(polygon.within?(border + offset, border)).to be(false)
+            expect(polygon.within?(border, border + offset)).to be(false)
           end
         end
       end

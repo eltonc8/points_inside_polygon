@@ -1,5 +1,14 @@
 class Polygon
   def initialize(*vertices)
+    vertices.each do |el|
+      unless el.is_a?(Array) && el.length == 2 && el.all? {|i| i.is_a? Numeric}
+        raise ArgumentError.new "expected argument format: [x, y]"
+      end
+    end
+    if vertices.length < 3
+      raise ArgumentError.new("at least three vertices expected")
+    end
+    
     @vertices = vertices
   end
 

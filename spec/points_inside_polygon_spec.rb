@@ -10,15 +10,24 @@ describe Polygon do
       expect(Polygon).to respond_to(:new).with(3).arguments
       expect(Polygon).to respond_to(:new).with(88).arguments
     end
+
+    it "should raise error to non array inputs" do
+      expect{Polygon.new("abc")}.to raise_error(ArgumentError)
+    end
+
+    it "should raise error to fewer than three inputs" do
+      expect{Polygon.new([0,0], [0,10])}.to raise_error(ArgumentError)
+    end
   end
 
   describe "#vertices" do
-    it "should respond to points method" do
-      expect(Polygon.new).to respond_to(:vertices)
+    let(:polygon) { Polygon.new([0,0], [0,10], [10,10], [10,0]) }
+
+    it "should respond to vertices method" do
+      expect(polygon).to respond_to(:vertices)
     end
 
     it "should return an array" do
-      polygon = Polygon.new
       expect(polygon.vertices).to be_a Array
     end
 

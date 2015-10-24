@@ -64,18 +64,30 @@ describe Polygon do
         100.times {|| expect(polygon.within?(rand * 10, rand * 10)).to be(true)}
       end
 
-      it "should return true for integer points at the border" do
+      it "should return true for integer points at the border - vertical" do
         [0, 10].each do |border|
           (0..10).each do |int|
-            expect(polygon.within?(border,int)).to be(true)
-            expect(polygon.within?(int,border)).to be(true)
+            expect(polygon.within?(border, int)).to be(true)
           end
         end
       end
 
-      it "should return true for decimal points at the border" do
+      it "should return true for integer points at the border - horizontal" do
+        [0, 10].each do |border|
+          (0..10).each do |int|
+            expect(polygon.within?(int, border)).to be(true)
+          end
+        end
+      end
+
+      it "should return true for decimal points at the border - vertical" do
         [0, 10].each do |border|
           expect(polygon.within?(border, rand * 10)).to be(true)
+        end
+      end
+
+      it "should return true for decimal points at the border - horizontal" do
+        [0, 10].each do |border|
           expect(polygon.within?(rand * 10, border)).to be(true)
         end
       end
@@ -90,23 +102,40 @@ describe Polygon do
         end
       end
 
-      it "should return false for decimal points just outside" do
+      it "should return false for decimal points just outside - vertical" do
         [0, 10].each do |border|
           10.times do
-            offset = (border == 0 ? -rand : rand) / 1000
+            offset = (border == 0 ? -1 : 1 ) * rand / 1000
             expect(polygon.within?(border + offset, rand * 10)).to be(false)
+          end
+        end
+      end
+
+      it "should return false for decimal points just outside - horizontal" do
+        [0, 10].each do |border|
+          10.times do
+            offset = (border == 0 ? -1 : 1 ) * rand / 1000
             expect(polygon.within?(rand * 10, border + offset)).to be(false)
           end
         end
       end
 
-      it "should return false for points outside but inline with a border" do
+      it "should return false for points outside but inline with a border - vertical" do
         [0, 10].each do |border|
           10.times do
-            offset = (border == 0 ? -rand : rand) / 1000
+            offset = (border == 0 ? -1 : 1 ) * rand / 1000
+            expect(polygon.within?(border, border)).to be(true)
+            expect(polygon.within?(border, border + offset)).to be(false)
+          end
+        end
+      end
+
+      it "should return false for points outside but inline with a border - horizontal" do
+        [0, 10].each do |border|
+          10.times do
+            offset = (border == 0 ? -1 : 1 ) * rand / 1000
             expect(polygon.within?(border, border)).to be(true)
             expect(polygon.within?(border + offset, border)).to be(false)
-            expect(polygon.within?(border, border + offset)).to be(false)
           end
         end
       end

@@ -38,7 +38,7 @@ class Polygon
         count += 1
 
       elsif ys[0] == ys[1]
-        #edge case 2. previous conditions imply that y = ys[0]
+        #edge case 2. previous conditions imply that y == ys[0] == ys[1]
         return true
 
       else

@@ -141,4 +141,89 @@ describe Polygon do
       end
     end
   end
+
+  describe "#within? complex cases" do
+    describe "simple 1 - right isosceles triangle" do
+      let(:polygon) { Polygon.new([0,0], [10,10], [10,0]) }
+
+      it "should return true for integer points at corners" do
+        expect(polygon.within?(0, 0)).to be(true)
+        expect(polygon.within?(10, 10)).to be(true)
+        expect(polygon.within?(10, 0)).to be(true)
+      end
+
+      it "should return true for integer points within" do
+        (1..9).each do |x|
+          (1..x-1).each do |y|
+            expect(polygon.within?(x, y)).to be(true)
+          end
+        end
+      end
+
+      it "should return true for integer points on diagonal" do
+        (1..9).each do |x|
+          expect(polygon.within?(x, x)).to be(true)
+        end
+      end
+
+      it "should return false for integer points not within" do
+        (1..9).each do |x|
+          (x+1..10).each do |y|
+            expect(polygon.within?(x, y)).to be(false)
+          end
+        end
+      end
+    end
+
+    describe "simple 2 - right isosceles triangle" do
+      let(:polygon) { Polygon.new([10,0], [0,10], [10,10]) }
+
+      it "should return true for integer points at corners" do
+        expect(polygon.within?(10, 10)).to be(true)
+        expect(polygon.within?(0, 10)).to be(true)
+        expect(polygon.within?(10, 0)).to be(true)
+      end
+
+      it "should return true for integer points within" do
+        (1..9).each do |x|
+          (11-x..10).each do |y|
+            expect(polygon.within?(x, 10-y)).to be(true)
+          end
+        end
+      end
+
+      it "should return true for integer points on diagonal" do
+        (1..9).each do |x|
+          expect(polygon.within?(x, 10-x)).to be(true)
+        end
+      end
+    end
+
+    describe "complex 3 - right triangle" do
+      let(:polygon) { Polygon.new([0,0], [12,9], [12,0]) }
+
+      it "should return true for integer points at corners" do
+        expect(polygon.within?(0, 0)).to be(true)
+        expect(polygon.within?(12, 9)).to be(true)
+        expect(polygon.within?(12, 0)).to be(true)
+      end
+
+      it "should return true for decimal points on diagonal" do
+        (0..12).each do |x|
+          expect(polygon.within?(x, x / 4 * 3)).to be(true)
+        end
+      end
+    end
+
+    describe "complex 4 - diamond" do
+      let(:polygon) { Polygon.new([0,5], [5,10], [10,5], [5,0]) }
+
+      it "should return true for integer points" do
+        expect(polygon.within?(0, 5)).to be(true)
+        expect(polygon.within?(5, 0)).to be(true)
+        expect(polygon.within?(10, 5)).to be(true)
+        expect(polygon.within?(5, 10)).to be(true)
+      end
+    end
+  end
 end

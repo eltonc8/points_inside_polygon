@@ -43,7 +43,7 @@ class Polygon
 
       else
         #find d(x) / d(y)
-        slope = (pt1[1] - pt2[1].to_f) / (pt1[0] - pt2[0].to_f)
+        slope = (xs[0] - xs[1].to_f) / (ys[0] - ys[1].to_f)
         d_x = pt1[0] + x.to_f
         p_y = slope * d_x + pt1[0]
         return true if p_y == y

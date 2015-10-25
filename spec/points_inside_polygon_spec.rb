@@ -186,8 +186,8 @@ describe Polygon do
 
       it "should return true for integer points within" do
         (1..9).each do |x|
-          (11-x..10).each do |y|
-            expect(polygon.within?(x, 10-y)).to be(true)
+          (11-x..9).each do |y|
+            expect(polygon.within?(x, y)).to be(true)
           end
         end
       end
@@ -216,14 +216,48 @@ describe Polygon do
     end
 
     describe "complex 4 - diamond" do
-      let(:polygon) { Polygon.new([0,5], [5,10], [10,5], [5,0]) }
+      let(:polygon) { Polygon.new([0,5], [-5, 0], [0,-5], [5,0]) }
 
-      it "should return true for integer points" do
-        expect(polygon.within?(0, 5)).to be(true)
-        expect(polygon.within?(5, 0)).to be(true)
-        expect(polygon.within?(10, 5)).to be(true)
-        expect(polygon.within?(5, 10)).to be(true)
+      it "should return true for integer points at corners" do
+        expect(polygon.within?( 0,  5)).to be(true)
+        expect(polygon.within?( 0, -5)).to be(true)
+        expect(polygon.within?( 5,  0)).to be(true)
+        expect(polygon.within?(-5,  0)).to be(true)
       end
+
+      it "should return true for points lying on the x-axis" do
+        (-12..12).each do |x|
+          expect(polygon.within?(x / 3.0, 0)).to be(true)
+        end
+      end
+
+      it "should return true for points lying on the y-axis" do
+        (-12..12).each do |y|
+          expect(polygon.within?(0, y / 3.0)).to be(true)
+        end
+      end
+
+      it "should return true for any circular points lying inside" do
+        radius = Math.sqrt((5 * 5) / 2)
+        (0...360).each do |d|
+          x = Math.cos(Math::PI * d / 180) * 1
+          y = Math.sin(Math::PI * d / 180) * 1
+          expect(polygon.within?(x, y)).to be(true)
+        end
+      end
+
+      it "should return false for any circular points lying outside" do
+        radius = 5.000000001
+        (0...360).each do |d|
+          x = Math.cos(Math::PI * d / 180) * radius
+          y = Math.sin(Math::PI * d / 180) * radius
+          expect(polygon.within?(x, y)).to be(false)
+        end
+      end
+    end
+
+    describe "complex 5 - boat" do
+
     end
   end
 end

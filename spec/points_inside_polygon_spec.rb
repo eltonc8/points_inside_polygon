@@ -281,8 +281,74 @@ describe Polygon do
       end
     end
 
-    describe "complex 5 - boat" do
+    describe "complex 5 - 'boat'" do
+      let(:polygon) { Polygon.new([-8, 0], [-10, 10], [-5, 5], [5, 5], [10, 10], [8,0]) }
 
+      it "should return false for any points above the figure" do
+        (-11..11).each do |y|
+          expect(polygon.within?(11, y)).to be(false)
+        end
+      end
+
+      it "should return true for points within the figure" do
+        expect(polygon.within?(-9, 4)).to be(false)
+        (-8..8).each do |x|
+          expect(polygon.within?(x, 4)).to be(true)
+        end
+        expect(polygon.within?( 9, 4)).to be(false)
+      end
+
+      it "should return true for points within the concavity of the figure" do
+        expect(polygon.within?(-8, 8)).to be(true)
+        (-7..7).each do |x|
+          expect(polygon.within?(x, 8)).to be(false)
+        end
+        expect(polygon.within?( 8, 8)).to be(true)
+      end
+    end
+
+    describe "complex 6 - 'timeglass'" do
+      let(:polygon) { Polygon.new([-1,  1], [-10, 10], [10, 10], [1, 1],
+                                  [ 1, -1], [ 10, -10], [-10, -10], [-1, -1]) }
+
+      it "should return false for any points above the figure" do
+        (-11..11).each do |y|
+          expect(polygon.within?(11, y)).to be(false)
+        end
+      end
+
+      it "should return true for points within the core of the figure" do
+        (-10..10).each do |y|
+          expect(polygon.within?(0, y)).to be(true)
+        end
+      end
+
+      it "should return true for points within the figure - top" do
+        expect(polygon.within?(-9, 8)).to be(false)
+        (-8..8).each do |x|
+          expect(polygon.within?(x, 8)).to be(true)
+        end
+        expect(polygon.within?( 9, 8)).to be(false)
+      end
+
+      it "should return true for points within the figure - bottom" do
+        expect(polygon.within?(-9, -8)).to be(false)
+        (-8..8).each do |x|
+          expect(polygon.within?(x, -8)).to be(true)
+        end
+        expect(polygon.within?( 9, -8)).to be(false)
+      end
+
+      it "should return true for points within the concavities of the figure" do
+        expect(polygon.within?(-9, -9)).to be(true)
+        expect(polygon.within?( 9, -9)).to be(true)
+        (-8..8).each do |y|
+          expect(polygon.within?(-9, y)).to be(false)
+          expect(polygon.within?(9, y)).to be(false)
+        end
+        expect(polygon.within?(-9,  9)).to be(true)
+        expect(polygon.within?( 9,  9)).to be(true)
+      end
     end
   end
 end

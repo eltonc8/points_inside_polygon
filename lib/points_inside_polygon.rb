@@ -18,6 +18,8 @@ class Polygon
 
   def within?(x, y)
     #method - is the number of line crossings odd?
+    # project from this point to negative y-infinity - count
+    # number of corssings (line(position_y) < y)
     count = 0
 
     #test each line to see if the point (x, y) lies to right of it.

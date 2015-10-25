@@ -1,5 +1,5 @@
 require 'points_inside_polygon'
-
+require 'byebug'
 describe Polygon do
   describe "#initialize" do
     it "should respond to new method" do
@@ -120,6 +120,13 @@ describe Polygon do
         end
       end
 
+      it "should return false for points inline with a border - vertical" do
+        expect(polygon.within?( 0, 11)).to be(false)
+        expect(polygon.within?(10, 11)).to be(false)
+        expect(polygon.within?( 0, -1)).to be(false)
+        expect(polygon.within?(10, -1)).to be(false)
+      end
+
       it "should return false for points outside but inline with a border - vertical" do
         [0, 10].each do |border|
           10.times do
@@ -128,6 +135,13 @@ describe Polygon do
             expect(polygon.within?(border, border + offset)).to be(false)
           end
         end
+      end
+
+      it "should return false for points inline with a border - horizontal" do
+        expect(polygon.within?(11,  0)).to be(false)
+        expect(polygon.within?(11, 10)).to be(false)
+        expect(polygon.within?(-1,  0)).to be(false)
+        expect(polygon.within?(-1, 10)).to be(false)
       end
 
       it "should return false for points outside but inline with a border - horizontal" do
@@ -186,7 +200,7 @@ describe Polygon do
 
       it "should return true for integer points within" do
         (1..9).each do |x|
-          (11-x..9).each do |y|
+          (10-x..9).each do |y|
             expect(polygon.within?(x, y)).to be(true)
           end
         end
@@ -223,6 +237,17 @@ describe Polygon do
         expect(polygon.within?( 0, -5)).to be(true)
         expect(polygon.within?( 5,  0)).to be(true)
         expect(polygon.within?(-5,  0)).to be(true)
+      end
+
+      it "should return true for the origin 0, 0" do
+        expect(polygon.within?(0, 0)).to be(true)
+      end
+
+      it "should return true for these unit positions" do
+        expect(polygon.within?(0,  1)).to be(true)
+        expect(polygon.within?(0, -1)).to be(true)
+        expect(polygon.within?(-1, 0)).to be(true)
+        expect(polygon.within?( 1, 0)).to be(true)
       end
 
       it "should return true for points lying on the x-axis" do
